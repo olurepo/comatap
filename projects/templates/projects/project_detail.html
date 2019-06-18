@@ -1,0 +1,73 @@
+{% extends "projects/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <br>
+        <h2 class="title"> {{project.title}} </h2>
+            <div class="row">
+                <div class="col-md-8">
+                    <img src="{% static 'img/LabProject.jpg' %}" alt="" width="90%">
+                </div>
+                <div class="col-md-4">
+                    <h5> Maturity Sensors: </h5>
+                    <p> Maturity sensors (named abstractly or according to their on-site locations), are listed below, 
+                        click 'See Details' to check the status of the sensor(s). </p>
+                </div>
+
+            </div>
+            <br>
+            {% for sensor in sensors %}
+                <div class="col-md-4">
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div>
+                                <h3 class="title">{{ sensor.sensor_name }}</h3>
+                                <div class="border-bottom mb-1">
+                                    <small class="text-muted"> UUID: ({{ sensor.sensor_id }}) </small>
+                                </div>
+                                    <div>
+                                        <small class="card-text">Project: </small>
+                                        <a class="mr-2" href="{% url 'project-detail' project.pk %}"> {{ sensor.project.title }}</a>
+                                    </div>
+                                    
+                                    <div>
+                                        <small class="text-muted">Project Engr.: </small>
+                                        <a class="mr-2" href="#"> {{ sensor.project.person }}</a>
+                                    </div>                               
+                            </div>
+                                
+                            
+                            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Check Status</button>
+                        
+
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="exampleModalLabel">Configure "{{ sensor.sensor_name }}" Test </h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="article-content">
+                                                For maturity test accuracy, be sure to configure and refresh the test results on the next page.
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"> Return </button>
+                                            <a href="{% url 'combined-data' sensor.pk %}" class="btn btn-primary" type="submit"> Proceed </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="article-metadata">
+                                <small class="text-muted"></small>{{ project.date_created|date:'F d, Y' }}</small> <small class="text-muted"> (SN: {{ sensor.pk }})</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+    <br>
+{% endblock content %}

@@ -1,0 +1,25 @@
+{% extends "projects/base.html" %}
+{% load static %}
+{% block content %}
+
+    <div class="col-md-8 offset-md-2">
+        <h1>{{ category | title }}</h1>
+        <hr>
+        {% for post in posts %}
+            <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
+            <small>
+                {{ post.date_posted|date:'F d, Y'  }} |&nbsp;
+                Categories:&nbsp;
+                {% for category in post.categories.all %}
+                <a href="{% url 'post-category' category.name %}">
+                    {{ category.name }}
+                </a>&nbsp;
+                {% endfor %}
+            </small>
+            <p>{{ post.content | slice:":400" }}...</p>
+        {% endfor %}
+        <hr>
+    </div >
+    
+
+{% endblock content %}

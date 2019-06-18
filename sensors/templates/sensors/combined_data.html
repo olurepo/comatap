@@ -1,0 +1,91 @@
+{% extends "projects/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <div class="col-md-12 col-mt-4 col-mb-4">
+        <div class="row">
+            <br>
+            <!-- CONFIGURATION FORM FORM HERE -->
+            <p>
+                <div class="col-md-3">
+                    <div class="content-section">
+                        <h3>Set Maturity Parameters</h3>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <button type="submit" class="btn btn-primary"> Configure Test / Refresh </button>
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'get-data' sensor.pk %}"><button type="submit" class="btn btn-warning"> Update Database </button></a>
+                    </div>
+                </div>
+                <!-- CONFIGURATION FORM END-->
+            </p>
+    
+    
+            <div class="col-md-8">
+                <div class="float-right">
+                    <a class="nav-item nav-link" href="{% url 'concrete-strength' sensor.pk %}"><button type="submit" class="btn btn-primary"> Check Concrete Strength </button></a>
+                </div>
+                <p>
+                    {% if sensor %}
+                        <p class="article-content"> The following are sensor details = {{ sensor.sensor_name }}, sensor_id: {{ sensor.pk }}, {{ sensor.project.id }} </p>
+                    {% endif %}
+                </p>
+    
+                <br>
+                <h2> Concrete Temperature & Humidity </h2>
+                <p>  Real-time temperature and humidity of concrete is presented below.</p>
+            
+                {% if data %}  <!-- this is similar to 'for loop' in python -->
+                    
+                    <p class="article-content"> The current temperature of concrete is = {{ data.ave_temp }}°C</p>
+                    <p class="article-content"> The current humidity of concrete is = {{ data.ave_hum }} %</p>      
+                {% endif %}
+                
+                {% if temp_graph %} 
+                    <!-- this is similar to 'for loop' in python -->
+                    <div style="width:1500;height:1000">
+                    {{ temp_graph|safe }}
+                    </div>
+                {% endif %}
+    
+                <br>
+                <h2> Real-Time Concrete Maturity </h2>
+                <p>  Real-time maturity index of concrete is presented below. </p>
+                
+                <p class="article-content"> The maturity(M) of this concrete is = {{ current_maturity }}(C-hr)</p>
+            
+                <!-- graph was converted to a string in a dict called context -->
+                {% if maturity_graph %} 
+                    <div style="width:1500;height:1000">
+                    {{ maturity_graph|safe }}
+                    </div>
+                {% endif %}
+            
+                                    <!-- Newly added -->
+                <br>
+                <p>
+                    <h2> Real-Time Concrete Strength </h2>
+                    <p>  Real-time strength of this concrete specimen is presented below. </p>
+                    
+                    <p class="article-content"> The current strength(Fc) of this specimen is = {{ current_strength }} MPa</p>
+                
+                    <!-- graph was converted to a string in a dict called context -->
+                    {% if strength_graph %} 
+                        <div style="width:1500;height:1000">
+                        {{ strength_graph|safe }}
+                        </div>
+                    {% endif %}
+                </p>
+
+                <!-- Navbar Right Side -->
+                <div class="float-left col-mb-4 col-mt-4">
+                    <a class="nav-item nav-link" href="#"><button type="submit" class="btn btn-primary" > Download this Result </button></a>
+                </div>
+            </div>
+                    
+        </div>
+    </div>
+{% endblock content %}

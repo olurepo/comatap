@@ -1,0 +1,56 @@
+{% extends "projects/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    
+    <div class="row">
+    <br>
+
+        <div class="col-md-8">
+            <br>
+            <h2> Concrete Mix Proportion </h2>
+            <p>  The Mix Proportion Table for this Projected is as presented below: </p>
+        
+            <br>
+            <p>
+                <h2> Real-Time Concrete Strength </h2>
+                <p>  Real-time strength of this concrete specimen is presented below. </p>
+                
+                <p class="article-content"> The current strength(Fc) of this specimen is = {{ current_strength }} MPa</p>
+            
+                <!-- graph was converted to a string in a dict called context -->
+                {% if strength_graph %} 
+                    <div style="width:1500;height:1000">
+                    {{ strength_graph|safe }}
+                    </div>
+                {% endif %}
+            </p>
+            <br>
+            <p>
+                <a class="btn btn-primary pull-right mb-6 mt-6" href="#"> Download Result </a>
+            </p>
+            <br>
+        </div>
+        
+        <p>
+            <div class="col-md-3 mt-4">
+                <div class="content-section">
+                    <ul class="list-group">
+                        <h3 class="title white-text"> Navigation Bar </h3>
+                        <p class='text-muted'> Use the buttons below to navigate through results' pages.
+                            <li class="list-group-item list-group-item-light"><a href="{% url 'project-detail' sensor.project.pk %}" class="btn btn-secondary"> Project Home </a></li>
+                            <li class="list-group-item list-group-item-light"><a class="btn btn-secondary" href="{% url 'concrete-maturity' sensor.pk %}"> Concrete Maturity </a></li>
+                            <li class="list-group-item list-group-item-light"><a class="btn btn-secondary" href="{% url 'combined-data' sensor.pk %}"> Combined Result </a></li>
+                            
+                            <p class="mt-4">
+                                <li class="list-group-item list-group-item-light"><a class="btn btn-secondary" href="#"> Download Result </a></li>
+                                <li class="list-group-item list-group-item-light"><a class="btn btn-secondary" href="{% url 'project-about' %}"> About </a></li>
+                            </p>
+                        </p>
+                    </ul>
+                </div>
+            </div>
+        </p>            
+    </div>
+
+{% endblock content %}

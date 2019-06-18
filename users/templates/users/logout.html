@@ -1,0 +1,9 @@
+{% extends "projects/base.html" %}
+{% block content %}
+    <h2>You are logged out of Testing Blog.</h2>
+    <div class="border-top pt-3">
+        <small class="text-muted"> Hope you enjoyed your experience? <a class="ml-2" href="{% url 'login' %}">Login Again!</a>
+        </small>
+    </div>
+
+{% endblock content %}
