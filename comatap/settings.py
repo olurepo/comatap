@@ -78,6 +78,7 @@ WSGI_APPLICATION = 'comatap.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -86,6 +87,7 @@ DATABASES = {
 }
 
 """
+
 if DEBUG:
     DATABASES = {
         'default': {
@@ -97,14 +99,14 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'myproject',
-            'USER': 'myprojectuser',
-            'PASSWORD': 'password',
+            'NAME': 'comatap',
+            'USER': 'comatap_admin',
+            'PASSWORD': 'maturity_321',
             'HOST': 'localhost',
             'PORT': '',
         }
     }
-"""
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
