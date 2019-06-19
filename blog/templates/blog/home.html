@@ -2,14 +2,13 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
+  <article class="media content-section">
+    <h3>Hi, welcome to COMATblog</h3>
+    <p class="article-content"> 
+      COMATblog is a community of researchers, engineers, project managers, concrete professionals and students who deal with concrete as a construction material. 
+    </p>
+  </article>
   <div class="col-md-8 offset-md-2">
-    <article class="media content-section">
-
-      <h3>Hi, welcome to COMATblog</h3>
-      <p class="article-content"> COMATblog is a community of researchers, engineers, project managers, concrete professionals and students who deal with concrete as a construction material... </p>
-
-    </article>
-
     {% for post in posts %}  <!-- this is similar to 'for loop' in python -->
         <article class="media content-section">
         <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
