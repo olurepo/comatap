@@ -6,16 +6,19 @@
     <h3> Hi, welcome to COMATblog! </h3>
     <p class="article-content"> 
       COMATblog is a community where researchers, engineers, project managers, concrete professionals and students who deal with concrete share their ideas about the construction material. Members also gets research and professional tips on various topics of concrete. 
-      <p>
-        Have something 'concrete' to share?
-        <div class="form-group ml-3">
-          {% if user.is_authenticated %}
-            <a class="nav-item nav-link btn btn-outline-info" href="{% url 'post-create' %}"> Create New Article </a>
-          {% else %}
-            <a class="nav-item nav-link btn btn-outline-info" href="{% url 'register' %}"> Start Publishing </a>
-          {% endif %}
-        </div>
-      </p>
+      
+      <div class="row">
+        <p>
+          Have something 'concrete' to share?
+          <div class="form-group">
+            {% if user.is_authenticated %}
+              <a class="col-md-4 ml-3 nav-item nav-link btn btn-outline-info" href="{% url 'post-create' %}"> Create New Article </a>
+            {% else %}
+              <a class="col-md-4 ml-3 nav-item nav-link btn btn-outline-info" href="{% url 'register' %}"> Yes, I do. </a>
+            {% endif %}
+          </div>
+        </p>
+      </div>
     </p>
 
   <div class="col-md-8 offset-md-2">

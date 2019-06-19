@@ -9,8 +9,14 @@
                     <img src="{% static 'img/LabProject.jpg' %}" alt="" width="90%">
                 </div>
                 <div class="col-md-4">
+                    <h5> Project Description: </h5>
+                    {% if describe %}
+                        <p> {{ describe }} </p>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
                     <h5> Maturity Sensors: </h5>
-                    <p> Maturity sensors (named abstractly or according to their on-site locations), are listed below, 
+                    <p> Maturity sensors (named serially, abstractly or according to their on-site locations), are listed below, 
                         click 'See Details' to check the status of the sensor(s). </p>
                 </div>
 

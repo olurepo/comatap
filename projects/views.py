@@ -20,8 +20,11 @@ def project_detail(request, pk):
     project = Project.objects.get(pk=pk)
     sensors = Sensor.objects.filter(project=project)
 
+    describe = project.description
+
     context = {
         'project': project,
         'sensors': sensors,
+        'describe': describe,
     }
     return render(request, 'projects/project_detail.html', context)
