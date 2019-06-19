@@ -7,15 +7,14 @@
     <p class="article-content"> 
       COMATblog is a community where researchers, engineers, project managers, concrete professionals and students who deal with concrete share their ideas about the construction material. Members also gets research and professional tips on various topics of concrete. 
       <p>
-        Do you have something 'concrete' to share? 
-
+        You have something 'concrete' to share? 
+      </p><div class="form-group"></div>
           {% if user.is_authenticated %}
-            <a class="nav-item nav-link btn btn-outline" href="{% url 'post-create' %}"> Create New Article </a>
+            <a class="nav-item nav-link btn btn-outline-info" href="{% url 'post-create' %}"> Create New Article </a>
           {% else %}
-            <a class="nav-item nav-link btn btn-outline" href="{% url 'register' %}"> Start Publishing </a>
+            <a class="nav-item nav-link btn btn-outline-info" href="{% url 'register' %}"> Start Publishing </a>
           {% endif %}
-
-      </p>
+      </div>
     </p>
 
   <div class="col-md-8 offset-md-2">
