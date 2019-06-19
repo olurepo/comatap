@@ -5,15 +5,17 @@
 
     <h3> Hi, welcome to COMATblog! </h3>
     <p class="article-content"> 
-      COMATblog is a community where researchers, engineers, project managers, concrete professionals and students who deal with concrete share their ideas about the construction material.
-      Users can also get tips on various topics of concrete. Do you have something 'concrete' to share? 
-    </p>
-    <p>
-        {% if user.is_authenticated %}
-          <a class="nav-item nav-link" href="{% url 'post-create' %}"> Create New Article </a>
-        {% else %}
-          <a class="nav-item nav-link" href="{% url 'register' %}"> Start Publishing </a>
-        {% endif %}
+      COMATblog is a community where researchers, engineers, project managers, concrete professionals and students who deal with concrete share their ideas about the construction material. Members also gets research and professional tips on various topics of concrete. 
+      <p>
+        Do you have something 'concrete' to share? 
+        <div>
+          {% if user.is_authenticated %}
+            <a class="nav-item nav-link btn btn-outline-info" href="{% url 'post-create' %}"> Create New Article </a>
+          {% else %}
+            <a class="nav-item nav-link btn btn-outline-info" href="{% url 'register' %}"> Start Publishing </a>
+          {% endif %}
+        </div>
+      </p>
     </p>
 
   <div class="col-md-8 offset-md-2">
