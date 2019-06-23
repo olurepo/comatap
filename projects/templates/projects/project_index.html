@@ -42,29 +42,26 @@
     <h2 class="title mb-4"> Ongoing Projects </h2>
     <div class="col-md-12">
         <div class="row">
-            <div class="card col-md-3">
-                {% for project in projects %}
-                    <div>
-                        <div class="col-mb-2 mt-2">
-                            <img class="card-img-top" src="{{ project.image.url }}">
-                            <div class="card-body">
-                                <div >
-                                    <h4 class="title">{{ project.title }}</h4>
-                                    <small class="text-muted">Project Engr.: </small>
-                                    <a class="mr-2" href="#"> {{ project.person }}</a>
-                                </div>
-                                <br>
-                                <p class="card-text">{{ project.description | slice:"50" }}...</p>
-                                <a href="{% url 'project-detail' project.pk %}" class="btn btn-primary"> More Details </a>
-                                <div class="article-metadata">
-                                    <small class="text-muted">{{ project.date_created|date:'F d, Y' }}</small>
-                                </div>
+            {% for project in projects %}
+                <div class="col-md-4">
+                    <div class="card-mb-2 mt-2">
+                        <img class="card-img-top" src="{{ project.image.url }}">
+                        <div class="card-body">
+                            <div >
+                                <h4 class="card-title">{{ project.title }}</h4>
+                                <small class="text-muted">Project Engr.: </small>
+                                <a class="mr-2" href="#"> {{ project.person }}</a>
+                            </div>
+                            <br>
+                            <p class="card-text">{{ project.description | slice:"50" }}...</p>
+                            <a href="{% url 'project-detail' project.pk %}" class="btn btn-primary"> More Details </a>
+                            <div class="article-metadata">
+                                <small class="text-muted">{{ project.date_created|date:'F d, Y' }}</small>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
-
-            </div>
+                </div>
+            {% endfor %}
         </div>
         <br>
     </div>  
