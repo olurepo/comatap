@@ -35,6 +35,10 @@ body {
     border-radius: 3px;
     margin-bottom: 20px;
   }
+  
+  .bg-steel {
+    background-color: #5f788a;
+  }
 
   .site-footer .navbar-nav .nav-link {
     color: #cbd5db;
