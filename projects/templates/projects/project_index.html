@@ -57,7 +57,10 @@
                             <a href="{% url 'project-detail' project.pk %}" class="btn btn-primary"> More Details </a>
                             <div class="article-metadata">
                                 <small class="text-muted">{{ project.date_created|date:'F d, Y' }}</small>
-                                <small class="text-muted ml-2"> {{ project.categories }} </small>
+                                Categories:&nbsp;
+                                {% for category in project.categories.all %}
+                                    <a class="text-muted"> {{ category.name }} </a>&nbsp;
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

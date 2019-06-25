@@ -35,6 +35,7 @@ def get_data(request, pk):
     humList = []
 
     existing_data = Data.objects.filter(sensor=sensor)
+    existing_data.delete()
     row_count = int(len(existing_data))
 
     if row_count==0:
