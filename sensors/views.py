@@ -58,7 +58,7 @@ def get_data(request, pk):
             if sensor_id == unique_id:   # confirm first that it is same sensor_id
                 
                 if len(existing_data)==len(raw_data[sensorDB_name]):     #sensorDB_name has been defined in 'def '
-                    pass
+                    print("Database is up-to-date!")
 
                 elif len(existing_data) < len(raw_data[sensorDB_name]):
                     print("There are " + str(len(raw_data[sensorDB_name][row_count:])) + " lines of fresh data...database update required!")
@@ -135,7 +135,6 @@ def combined_data(request, pk):
     sensor_id = sensor.id
 
     data = Data.objects.filter(sensor=sensor)
-    data.delete()
 
     # get all the available data on this sensor
     xList = []
