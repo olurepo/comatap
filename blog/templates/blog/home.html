@@ -4,13 +4,13 @@
 {% block content %}
 
     <h3> Hi, welcome to COMATblog! </h3>
-    <p class="article-content col-md-8"> 
+    <p class="article-content col-md-12"> 
       COMATblog is a community where researchers, engineers, project managers, concrete professionals and students who deal with concrete share their ideas about the construction material. Members also gets research and professional tips on various topics of concrete. 
       
-      <div class="col-md-12">
+      <div class="col-md-8">
         <div class="row">
             <p class="article-content">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 Will like to contribute or write articles?
               </div>
               <div class="form-group col-md-4">
@@ -23,66 +23,66 @@
             </p>
         </div>
       </div>
-    </p>
 
-  <div class="col-md-8 offset-md-2">
-    {% for post in posts %}  <!-- this is similar to 'for loop' in python -->
-        <article class="media content-section">
-        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted|date:'F d, Y' }}</small>
-            </div>
-            <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
-            <p class="article-content">{{ post.content | slice:":500" }}</p>
-          </div>
-      </article>
-    {% endfor %}
-
-    {% if is_paginated %}
-      {% if  page_obj.has_previous %}
-        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-      {% endif %}
-      {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% endif %}
-      {% endfor %}
-      {% if  page_obj.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-      {% endif %}
-    {% endif %}
-  </div>
-  <div class="col-md-4">
-    <div class="content-section">
-        <h4> FAQ </h4>
-        <p class='text-muted'>Looking for a specific content?
-            <ul class="list-group">
-                <form class="navbar-form navbar-left" role="search" method="GET" action="#"> 
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="q" value="">
-                        <button type="submit" class="btn-outline-secondary btn-sm mb-1 mt-1">Search</button>
-                    </div>
-                </form>
-            
-                <br>
-                <div class="content-section">
-                    <h4> Test Configuration- Why? </h4>
-                    <p class='text-muted'> Confirm concrete maturity parameters before proceeding to results!.
-                    <ul class="list-group">
-                        <a href="{% url 'project-about' %}" class="btn btn-primary">Learn More</a>
-                    </ul>
-                    </p>
+      <div class="col-md-8 offset-md-2">
+        {% for post in posts %}  <!-- this is similar to 'for loop' in python -->
+            <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+              <div class="media-body">
+                <div class="article-metadata">
+                  <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+                  <small class="text-muted">{{ post.date_posted|date:'F d, Y' }}</small>
                 </div>
-            </ul>
-        </p>
-    </div>
-  </div>
+                <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
+                <p class="article-content">{{ post.content | slice:":500" }}</p>
+              </div>
+          </article>
+        {% endfor %}
+
+        {% if is_paginated %}
+          {% if  page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          {% endif %}
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+          {% if  page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="col-md-4">
+        <div class="content-section">
+            <h4> FAQ </h4>
+            <p class='text-muted'>Looking for a specific content?
+                <ul class="list-group">
+                    <form class="navbar-form navbar-left" role="search" method="GET" action="#"> 
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="q" value="">
+                            <button type="submit" class="btn-outline-secondary btn-sm mb-1 mt-1">Search</button>
+                        </div>
+                    </form>
+                
+                    <br>
+                    <div class="content-section">
+                        <h4> Test Configuration- Why? </h4>
+                        <p class='text-muted'> Confirm concrete maturity parameters before proceeding to results!.
+                        <ul class="list-group">
+                            <a href="{% url 'project-about' %}" class="btn btn-primary">Learn More</a>
+                        </ul>
+                        </p>
+                    </div>
+                </ul>
+            </p>
+        </div>
+      </div>
+    </p>
 
 {% endblock content %}  <!--we can use just 'endblock' but for easy indentification of 
                             what block we are closing-->
