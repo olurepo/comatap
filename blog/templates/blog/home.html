@@ -9,14 +9,12 @@
       
       <div class="col-md-10">
         <div class="row">
-            <div class="article-content">
-              <p class="form-group col-md-4">
-                {% if user.is_authenticated %}
-                  <a class="nav-item nav-link btn btn-outline-info" href="{% url 'post-create' %}"> Create New Article </a>
-                {% else %}
-                  <a class="nav-item nav-link btn btn-outline-info" href="{% url 'register' %}"> Yes, I do. </a>
-                {% endif %}
-              </p>
+            <div class="article-content col-md-4 mb-2 mt-2">
+              {% if user.is_authenticated %}
+                <a class="nav-item nav-link btn btn-outline-info" href="{% url 'post-create' %}"> Create New Article </a>
+              {% else %}
+                <a class="nav-item nav-link btn btn-outline-info" href="{% url 'register' %}"> Yes, I do. </a>
+              {% endif %}
             </div>
         </div>
       </div>
