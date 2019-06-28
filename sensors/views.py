@@ -61,7 +61,7 @@ def get_data(request, pk):
                     print("Database is up-to-date!")
 
                 elif len(existing_data) < len(raw_data[sensorDB_name]):
-                    print("There are " + str(len(raw_data[sensorDB_name][row_count:])) + " lines of fresh data...database update required!")
+                    #print("There are " + str(len(raw_data[sensorDB_name][row_count:])) + " lines of fresh data...database update required!")
                     update_data = raw_data[sensorDB_name][row_count:]   # outstanding data from the database
                     for item in update_data:
                         temperature = item['temp']
@@ -76,7 +76,6 @@ def get_data(request, pk):
                         save_data.save()
                 else:
                     print('Check the list of data in the sever and your local database!')   # can be removed
-        print("Sensor(s) with unique_id: " + str(sensor_id) + ", exists!")
     
     msg = messages.success(request, f'Update successful. Please confirm test configuration parameters.')
 
@@ -135,7 +134,7 @@ def combined_data(request, pk):
     sensor_id = sensor.id
 
     data = Data.objects.filter(sensor=sensor)
-    #data.delete()
+    data.delete()
 
     # get all the available data on this sensor
     xList = []
