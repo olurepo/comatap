@@ -249,7 +249,7 @@ def combined_data(request, pk):
                 
                 elif counted_mat_row < len(maturity_index):
                     outstanding_maturity = maturity_index[counted_mat_row:]
-                    outstanding_age = dt[counted_mat_row:]
+                    outstanding_age = tim[counted_mat_row:]
                     Maturity_Data.objects.filter(sensor=sensor).delete()
                     for update_age, update_maturity in zip(outstanding_age, outstanding_maturity):
                         updated_values = Maturity_Data(equivalent_age=update_age, matu_index=update_maturity, sensor_id=unique_id)
