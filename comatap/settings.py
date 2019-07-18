@@ -87,7 +87,18 @@ DATABASES = {
 }
 
 """
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'comatap',
+        'USER': 'comatap_admin',
+        'PASSWORD': 'maturity_321',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
+"""
 if DEBUG:
     DATABASES = {
         'default': {
@@ -106,7 +117,7 @@ else:
             'PORT': '',
         }
     }
-
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
