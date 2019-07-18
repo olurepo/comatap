@@ -214,8 +214,8 @@ def combined_data(request, pk):
         'maturity_graph': maturity_graph,
         'data': Data.objects.last(),
         'current_maturity': current_maturity,
-        'strength_graph': strength_graph, # NEWLY ADDED 
-        'current_strength': current_strength, #NEWLY ADDED
+        #'strength_graph': strength_graph, # NEWLY ADDED 
+        #'current_strength': current_strength, #NEWLY ADDED
         'sensor': sensor,
         'form': form,
         }

@@ -50,19 +50,6 @@
                     {{ temp_graph|safe }}
                     </div>
                 {% endif %}
-    
-                <br>
-                <h2> Real-Time Concrete Maturity </h2>
-                <p>  Real-time maturity index of concrete is presented below. </p>
-                
-                <p class="article-content"> The maturity(M) of this concrete is = {{ current_maturity }}(C-hr)</p>
-            
-                <!-- graph was converted to a string in a dict called context -->
-                {% if maturity_graph %} 
-                    <div style="width:1500;height:1000">
-                    {{ maturity_graph|safe }}
-                    </div>
-                {% endif %}
 
                 <!-- Navbar Right Side -->
                 <div class="float-left col-mb-4 col-mt-4">
