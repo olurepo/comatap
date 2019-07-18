@@ -229,7 +229,7 @@ def combined_data(request, pk):
     counted_mat_row = int(len(existing_maturity))
 
     if counted_mat_row == 0:    # meaning there are NO previous data
-        for d_age, d_maturity in zip(dt, maturity_index):   # maturity_index is the cumulative maturity index value
+        for d_age, d_maturity in zip(tim, maturity_index):   # maturity_index is the cumulative maturity index value
             maturity_value = Maturity_Data(equivalent_age=d_age, matu_index=d_maturity, sensor_id=sensor_id)
             maturity_value.save()
 
