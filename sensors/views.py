@@ -244,8 +244,6 @@ def combined_data(request, pk):
                 
                 if counted_mat_row == len(maturity_index):
                     pass    # no need for any action
-                    # line below fits best but it will come up several times as the for loop
-                    messages.info(request, f'NOTE: There are no recent changes to Maturity-Index database.')
                 
                 elif counted_mat_row < len(maturity_index):
                     outstanding_maturity = maturity_index[counted_mat_row:]
@@ -317,7 +315,6 @@ def Strength(request, pk):
 
     last_data = data.last()
     current_strength = round(float(last_data.concrete_strength), 2)
-    print(current_strength)
 
     context = {
         'strength_graph': strength_graph,
@@ -354,7 +351,6 @@ def Maturity(request, pk):
 
     last_data = data.last()
     current_maturity = round(float(last_data.matu_index), 2)
-    print(current_maturity)
 
     context = {
         'maturity_graph': maturity_graph,
