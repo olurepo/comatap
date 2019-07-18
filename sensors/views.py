@@ -164,15 +164,15 @@ def combined_data(request, pk):
     
 
     dt = []
-    matu = [0]
+    matu = []
     for time_int, ave_temp in zip(tim, temp):
-        delta_t = round((time_int), 2) 
+        delta_t = round((time_int), 2)
         M = round(float(ave_temp - datum_temp)*delta_t, 2)  # this calculates maturity
         dt.append(delta_t)
         matu.append(M)
 
     maturity_index = np.round([sum(matu[:i + 1]) for i in range(len(matu))], 2)
-    current_maturity = maturity_index[-1] # get last M value to display on page
+    current_maturity = maturity_index[-1] # get last M value to display on results' page
     
     plot_maturity = go.Scatter(dict(x=dt, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
     data = go.Data([plot_maturity])
@@ -216,6 +216,8 @@ def combined_data(request, pk):
         'current_maturity': current_maturity,
         #'strength_graph': strength_graph, # NEWLY ADDED 
         #'current_strength': current_strength, #NEWLY ADDED
+        'matu': matu,
+        'maturity_index': maturity_index,
         'sensor': sensor,
         'form': form,
         }
