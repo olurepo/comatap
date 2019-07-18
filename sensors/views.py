@@ -134,7 +134,7 @@ def combined_data(request, pk):
     sensor_id = sensor.id
 
     data = Data.objects.filter(sensor=sensor)
-    
+    data.delete()
 
     # get all the available data on this sensor
     xList = []
@@ -146,6 +146,7 @@ def combined_data(request, pk):
         #xList.append(convert_time/(3600000000*24))  # to convert age to 'days', multiply by 24
         dt = round(xList[-1] - xList[0], 2)     # time interval btw temp records
         tim.append(dt)
+        
 
         tmp = item.ave_temp     # temperature data
         temp.append(tmp)
@@ -163,18 +164,17 @@ def combined_data(request, pk):
     temp_graph = ply.plot(figure, auto_open=False, output_type='div')
     
 
-    dt = []
+    delta_t = round([y-x for x,y in zip(tim, tim[1:])], 2)
     matu = []
-    for time_int, ave_temp in zip(tim, temp):
-        delta_t = round((time_int), 2)
-        M = round(float(ave_temp - datum_temp)*delta_t, 2)  # this calculates maturity
-        dt.append(delta_t)
+    for time_int, ave_temp in zip(delta_t, temp):
+        M = round(float(ave_temp - datum_temp)*time_int, 2)  # this calculates maturity
         matu.append(M)
 
     maturity_index = np.round([sum(matu[:i + 1]) for i in range(len(matu))], 2)
     current_maturity = maturity_index[-1] # get last M value to display on results' page
+    #current_maturity = matu[-1]
     
-    plot_maturity = go.Scatter(dict(x=dt, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_maturity = go.Scatter(dict(x=tim, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
     data = go.Data([plot_maturity])
     layout=go.Layout(title="Concrete Maturity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Maturity Index (C-hr)'}, showlegend=True)
     figure=go.Figure(data=data,layout=layout)
