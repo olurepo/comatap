@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ddg1z(_uh48!^8u8a!j+l*i(6cx^mqq!&bfe#+27tgwbwxpowl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True #False
 
 ALLOWED_HOSTS = ['165.22.110.173']
 
@@ -88,6 +88,18 @@ DATABASES = {
 
 """
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'comatap',
+        'USER': 'comatap_admin',
+        'PASSWORD': 'maturity_321',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+
+"""
 if DEBUG:
     DATABASES = {
         'default': {
@@ -106,6 +118,7 @@ else:
             'PORT': '',
         }
     }
+"""
 
 
 # Password validation
