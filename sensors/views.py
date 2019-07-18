@@ -164,8 +164,8 @@ def combined_data(request, pk):
     temp_graph = ply.plot(figure, auto_open=False, output_type='div')
     
 
-    delta_t = round([y-x for x,y in zip(tim, tim[1:])], 2)
-    matu = []
+    delta_t = [y-x for x,y in zip(tim, tim[1:])]
+    matu = [0]
     for time_int, ave_temp in zip(delta_t, temp):
         M = round(float(ave_temp - datum_temp)*time_int, 2)  # this calculates maturity
         matu.append(M)
