@@ -135,11 +135,11 @@ def combined_data(request, pk):
 
     data = Data.objects.filter(sensor=sensor)
     
-    
+    """
     data.delete()
     Strength_Data.objects.filter(sensor=sensor).delete()
     Maturity_Data.objects.filter(sensor=sensor).delete()
-    
+    """
 
     # get all the available data on this sensor
     xList = []
