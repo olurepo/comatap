@@ -216,9 +216,9 @@ def combined_data(request, pk):
             
     context = {
         'temp_graph': temp_graph,
-        'maturity_graph': maturity_graph,
         'data': Data.objects.last(),
         'current_maturity': current_maturity,
+        #'maturity_graph': maturity_graph,
         #'strength_graph': strength_graph, 
         #'current_strength': current_strength,
         'matu': matu,
