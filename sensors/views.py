@@ -18,7 +18,7 @@ import datetime
 
 def get_data(request, pk):
     sensor = Sensor.objects.get(pk=pk)
-    project_id = sensor.project.id
+    """project_id = sensor.project.id
     sensor_id = sensor.id
 
     sensorDB_name = 'sensor'+str(sensor.id)  # e.g. sensor1, sensor2...
@@ -76,6 +76,7 @@ def get_data(request, pk):
                         save_data.save()
                 else:
                     print('Check the list of data in the sever and your local database!')   # can be removed
+                    """
     
     msg = messages.success(request, f'Update successful. Please confirm test configuration parameters.')
 
