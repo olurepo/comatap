@@ -15,7 +15,7 @@ class Sensor(models.Model):
         
 class Data(models.Model):
     sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)
-    time_taken = models.DateTimeField()
+    time_taken = models.DateTimeField(default=timezone.now)
     ave_temp = models.FloatField()
     ave_hum = models.FloatField()
     last_updated = models.DateTimeField(default=timezone.now)

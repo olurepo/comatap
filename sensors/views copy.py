@@ -179,12 +179,12 @@ def combined_data(request, pk):
     current_maturity = maturity_index[-1] # get last M value to display on results' page
     #current_maturity = matu[-1]
     
-    """plot_maturity = go.Scatter(dict(x=tim, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_maturity = go.Scatter(dict(x=tim, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
     data = go.Data([plot_maturity])
     layout=go.Layout(title="Concrete Maturity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Maturity Index (C-hr)'}, showlegend=True)
     figure=go.Figure(data=data,layout=layout)
 
-    maturity_graph = ply.plot(figure, auto_open=False, output_type='div')"""
+    maturity_graph = ply.plot(figure, auto_open=False, output_type='div')
 
     
 
@@ -208,19 +208,19 @@ def combined_data(request, pk):
         equiv_strength.append(predict_strength)
     current_strength = round(equiv_strength[-1], 2)
 
-    """plot_strength = go.Scatter(dict(x=age, y=equiv_strength, name='Strength (MPa)', marker={'color': 'brown', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_strength = go.Scatter(dict(x=age, y=equiv_strength, name='Strength (MPa)', marker={'color': 'brown', 'symbol': 104, 'size': 10}, mode="lines"))
     data = go.Data([plot_strength])
     layout=go.Layout(title="Concrete Strength Graph", xaxis={'title':'Age (days)'}, yaxis={'title':'Concrete Strength (Mpa)'}, showlegend=True)
     figure=go.Figure(data=data,layout=layout)
-    strength_graph = ply.plot(figure, auto_open=False, output_type='div')"""
+    strength_graph = ply.plot(figure, auto_open=False, output_type='div')
             
     context = {
         'temp_graph': temp_graph,
         'maturity_graph': maturity_graph,
         'data': Data.objects.last(),
         'current_maturity': current_maturity,
-        #'strength_graph': strength_graph, 
-        #'current_strength': current_strength,
+        #'strength_graph': strength_graph, # NEWLY ADDED 
+        #'current_strength': current_strength, #NEWLY ADDED
         'matu': matu,
         'maturity_index': maturity_index,
         'sensor': sensor,
