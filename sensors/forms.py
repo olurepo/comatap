@@ -17,8 +17,12 @@ class TestConfiguration(forms.ModelForm):
 
 
 class MaturityForm(forms.Form):
-    datum_temp = forms.FloatField()
-    activation_energy = forms.FloatField()
+    datum_temp = forms.FloatField(widget=forms.Textarea(attrs={
+        'placeholder': 'default: -10',
+    }))
+    activation_energy = forms.FloatField(widget=forms.Textarea(attrs={
+        'placeholder': 'default: 40,000',
+    }))
     gas_constant = forms.FloatField()
     ref_temp = forms.FloatField()
     ultimate_strength = forms.FloatField()
