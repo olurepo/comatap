@@ -19,12 +19,29 @@ class TestConfiguration(forms.ModelForm):
 class MaturityForm(forms.Form):
     datum_temp = forms.FloatField(widget=forms.Textarea(attrs={
         'placeholder': 'default: -10',
+        'rows': '1', # this is the size of the input box
     }))
     activation_energy = forms.FloatField(widget=forms.Textarea(attrs={
         'placeholder': 'default: 40,000',
+        'rows': '1',
     }))
-    gas_constant = forms.FloatField()
-    ref_temp = forms.FloatField()
-    ultimate_strength = forms.FloatField()
-    a = forms.FloatField()
-    b = forms.FloatField()
+    gas_constant = forms.FloatField(widget=forms.Textarea(attrs={
+        'placeholder': 'default: 8.314',
+        'rows': '1',
+    }))
+    ref_temp = forms.FloatField(widget=forms.Textarea(attrs={
+        'placeholder': 'default: 23.0°C',
+        'rows': '1',
+    }))
+    ultimate_strength = forms.FloatField(widget=forms.Textarea(attrs={
+        'placeholder': 'default: 50 MPa',
+        'rows': '1',
+    }))
+    a = forms.FloatField(widget=forms.Textarea(attrs={
+        'placeholder': 'default: 4.0',
+        'rows': '1',
+    }))
+    b = forms.FloatField(widget=forms.Textarea(attrs={
+        'placeholder': 'default: 0.85',
+        'rows': '1',
+    }))
