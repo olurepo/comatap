@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, Processed_Data
+from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data
 from projects.models import Project
 from .forms import MaturityForm
 
@@ -15,70 +15,10 @@ import time
 import datetime
 
 
-def save_processed_data(request, pk):
-    sensor = Sensor.objects.get(pk=pk)
-    project_id = sensor.project.id
-    sensor_id = sensor.id
-
-    tim = []
-    temp = [0]
-    hum = [0]
-
-    data = Data.objects.filter(sensor=sensor)
-    
-    # get all the available data on this sensor
-    xList = []
-    for item in data:
-
-        log_time = item.time_taken         # time data in np.datetime64
-        convert_time = np.datetime64(log_time).astype('float')
-        xList.append(convert_time/(3600000000))  # in 'hours'
-        #xList.append(convert_time/(3600000000*24))  # to convert age to 'days', multiply by 24
-        dt = round(xList[-1] - xList[0], 2)     # time interval btw temp records
-        tim.append(dt)
-        
-
-        tmp = item.ave_temp     # temperature data
-        temp.append(tmp)
-
-        humid = item.ave_hum    # humidity data
-        hum.append(humid)
-
-    # ====== Save Processed Data to DB  ======= #
-    raw_data = Processed_Data.objects.filter(sensor=sensor)
-    row_count = int(len(raw_data))
-
-    if row_count == 0:    # meaning there are NO previous data
-        for delta_t, average_temperature, average_humidity in zip(tim, temp, hum):
-            processed_value = Processed_Data(age = delta_t, temperature = average_temperature, humidity = average_humidity, sensor_id=sensor_id)
-            processed_value.save()
-
-    elif row_count != 0:   # meaning there are existing data
-        for items in raw_data:
-            unique_id = items.sensor_id
-
-            if sensor_id == unique_id:   # confirm first that it is same sensor_id (see sensor_id definition above)
-                
-                if row_count == len(tim):
-                    pass    # no need for any action becos there are no new data // why not call the graph plotting function here?
-                
-                elif row_count < len(tim):  # 'temp' could have been used but for the inserted zeros
-                    outstanding_humid = hum[row_count:]
-                    outstanding_temp = temp[row_count:]
-                    outstanding_age = tim[row_count:]
-                    #Processed_Data.objects.filter(sensor=sensor).delete()
-                    for update_age, update_temperature, update_humidity in zip(outstanding_age, outstanding_temp, outstanding_humid): 
-                        updated_values = Processed_Data(age=update_age, temperature = update_temperature, humidity = update_humidity, sensor_id=unique_id)
-                        updated_values.save()
-    else:
-        messages.warning(request, f'Check the list of data for {sensor.sensor_name} in the sever and/or your local database')
-    # ========= END: Save Processed Data ========= #
-
-
 
 def get_data(request, pk):
     sensor = Sensor.objects.get(pk=pk)
-    project_id = sensor.project.id
+    """project_id = sensor.project.id
     sensor_id = sensor.id
 
     sensorDB_name = 'sensor'+str(sensor.id)  # e.g. sensor1, sensor2...
@@ -136,10 +76,9 @@ def get_data(request, pk):
                         save_data.save()
                 else:
                     print('Check the list of data in the sever and your local database!')   # can be removed
-                    
+                    """
     
     msg = messages.success(request, f'Update successful. Please confirm test configuration parameters.')
-    save_processed_data(request, pk)
 
     context = {
         'msg': msg,
@@ -173,7 +112,7 @@ def combined_data(request, pk):
     # get method, i.e. create form to get params
     form = MaturityForm()
 
-    #do a 'POST and receive' data command
+    #do a post and receive data command
     form = MaturityForm(request.POST)
     if form.is_valid():
         datum_temp = form.cleaned_data['datum_temp']
@@ -187,17 +126,21 @@ def combined_data(request, pk):
     else:
         form = MaturityForm() # repeat get command
 
+    tim = []
+    temp = [0]
+    hum = [0]
+
     sensor = Sensor.objects.get(pk=pk)
     project_id = sensor.project.id
     sensor_id = sensor.id
 
     data = Data.objects.filter(sensor=sensor)
-
-
+    
     """
-    tim = []
-    temp = [0]
-    hum = [0]
+    data.delete()
+    Strength_Data.objects.filter(sensor=sensor).delete()
+    Maturity_Data.objects.filter(sensor=sensor).delete()
+    """
 
     # get all the available data on this sensor
     xList = []
@@ -216,13 +159,6 @@ def combined_data(request, pk):
 
         humid = item.ave_hum    # humidity data
         hum.append(humid)
-        """
-
-    proc_data = Processed_Data.objects.filter(sensor=sensor)
-    for items in proc_data:
-        tim = items.age
-        temp = items.temperature
-        hum = items.humidity
 
 
     plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
@@ -250,8 +186,11 @@ def combined_data(request, pk):
     figure=go.Figure(data=data,layout=layout)
 
     maturity_graph = ply.plot(figure, auto_open=False, output_type='div')"""
+
     
 
+   # tim = get_data(sensor_id)[0]
+   # temp = get_data(sensor_id)[1]
     age = []                # age on x-axis
     equiv_strength = []     # strength on y-axis
 
