@@ -219,10 +219,16 @@ def combined_data(request, pk):
         """
 
     proc_data = Processed_Data.objects.filter(sensor=sensor)
+    tim = []
+    temp = [0]
+    hum = [0]
     for items in proc_data:
-        tim = items.age
-        temp = items.temperature
-        hum = items.humidity
+        x = items.age
+        y = items.temperature
+        z = items.humidity
+        tim.append(x)
+        temp.append(y)
+        hum.append(z)
 
 
     plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
