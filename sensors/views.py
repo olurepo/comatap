@@ -21,14 +21,14 @@ def save_processed_data(request, pk):
     sensor_id = sensor.id
 
     tim = []
-    temp = [0]
-    hum = [0]
+    temp = []
+    hum = []
 
-    data = Data.objects.filter(sensor=sensor)
+    raw_data = Data.objects.filter(sensor=sensor)
     
     # get all the available data on this sensor
     xList = []
-    for item in data:
+    for item in raw_data:
 
         log_time = item.time_taken         # time data in np.datetime64
         convert_time = np.datetime64(log_time).astype('float')
@@ -45,8 +45,8 @@ def save_processed_data(request, pk):
         hum.append(humid)
 
     # ====== Save Processed Data to DB  ======= #
-    raw_data = Processed_Data.objects.filter(sensor=sensor)
-    row_count = int(len(raw_data))
+    proc_data = Processed_Data.objects.filter(sensor=sensor)
+    row_count = int(len(proc_data))
 
     if row_count == 0:    # meaning there are NO previous data
         for delta_t, average_temperature, average_humidity in zip(tim, temp, hum):
@@ -54,7 +54,7 @@ def save_processed_data(request, pk):
             processed_value.save()
 
     elif row_count != 0:   # meaning there are existing data
-        for items in raw_data:
+        for items in proc_data:
             unique_id = items.sensor_id
 
             if sensor_id == unique_id:   # confirm first that it is same sensor_id (see sensor_id definition above)
