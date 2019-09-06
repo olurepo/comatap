@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, Processed_Data
+from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, #Processed_Data
 from projects.models import Project
 from .forms import MaturityForm
 
@@ -43,6 +43,7 @@ def save_processed_data(request, pk):
 
         humid = item.ave_hum    # humidity data
         hum.append(humid)
+        pass
 
     # ====== Save Processed Data to DB  ======= #
     proc_data = Processed_Data.objects.filter(sensor=sensor)
