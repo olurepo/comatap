@@ -23,7 +23,12 @@ class Data(models.Model):
     def __str__(self):
         return f'{self.sensor.sensor_name}'
 
-
+class Processed_Data(models.Model):
+    sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)
+    
+    
+    def __str__(self):
+        return f'{self.sensor.sensor_name}'
 
 
 class Maturity_Data(models.Model):
