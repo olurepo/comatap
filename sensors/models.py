@@ -25,7 +25,7 @@ class Data(models.Model):
 
 class Processed_Data(models.Model):
     sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)
-    age = models.DateTimeField(default=timezone.now)
+    age = models.FloatField()
     temperature = models.FloatField()
     humidity = models.FloatField()
     last_updated = models.DateTimeField(default=timezone.now)

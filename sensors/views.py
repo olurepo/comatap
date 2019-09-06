@@ -51,6 +51,7 @@ def save_processed_data(request, pk):
     if row_count == 0:    # meaning there are NO previous data
         for delta_t, average_temperature, average_humidity in zip(tim, temp, hum):
             processed_value = Processed_Data(age = delta_t, temperature = average_temperature, humidity = average_humidity, sensor_id=sensor_id)
+            print(processed_value)
             processed_value.save()
 
     elif row_count != 0:   # meaning there are existing data
