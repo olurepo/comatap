@@ -346,14 +346,14 @@ def Temp_Humid(request, pk):
     figure=go.Figure(data=data,layout=layout)
     temp_graph = ply.plot(figure, auto_open=False, output_type='div')
 
-    last_data = temphum_data.last()
-    current_temp = round(float(last_data.approx_temp), 2)
-    current_hum = round(float(last_data.approx_hum), 2)
+    #last_data = temphum_data.last()
+    #current_temp = round(float(last_data.approx_temp), 2)
+    #current_hum = round(float(last_data.approx_hum), 2)
 
     context = {
         'temp_graph': temp_graph,
-        'current_temp': current_temp,
-        'current_hum': current_hum,
+        #'current_temp': current_temp,
+        #'current_hum': current_hum,
         'sensor': sensor,
         }
     
