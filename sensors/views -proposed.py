@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, Temperature_Data
+from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data
 from projects.models import Project
 from .forms import MaturityForm
 
@@ -124,6 +124,7 @@ def combined_data(request, pk):
     else:
         form = MaturityForm() # repeat get command
 
+
     tim = []
     temp = [0]
     hum = [0]
@@ -133,10 +134,10 @@ def combined_data(request, pk):
     sensor_id = sensor.id
 
     data = Data.objects.filter(sensor=sensor)
+    proc_data = Processed_Data.objects.filter(sensor=sensor)
     
     
     #data.delete()
-    Temperature_Data.objects.filter(sensor=sensor).delete()
     Strength_Data.objects.filter(sensor=sensor).delete()
     Maturity_Data.objects.filter(sensor=sensor).delete()
     
@@ -159,6 +160,9 @@ def combined_data(request, pk):
         humid = item.ave_hum    # humidity data
         hum.append(humid)
 
+        save_proc_data = Processed_Data(age=dt, temperature=tmp, humidity=humid)
+        save_proc_data.save()
+
 
     plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
     plot_temp = go.Scatter(dict(x=tim, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
@@ -179,12 +183,12 @@ def combined_data(request, pk):
     current_maturity = maturity_index[-1] # get last M value to display on results' page
     #current_maturity = matu[-1]
     
-    """plot_maturity = go.Scatter(dict(x=tim, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_maturity = go.Scatter(dict(x=tim, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
     data = go.Data([plot_maturity])
     layout=go.Layout(title="Concrete Maturity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Maturity Index (C-hr)'}, showlegend=True)
     figure=go.Figure(data=data,layout=layout)
 
-    maturity_graph = ply.plot(figure, auto_open=False, output_type='div')"""
+    maturity_graph = ply.plot(figure, auto_open=False, output_type='div')
 
     
 
@@ -208,15 +212,15 @@ def combined_data(request, pk):
         equiv_strength.append(predict_strength)
     current_strength = round(equiv_strength[-1], 2)
 
-    """plot_strength = go.Scatter(dict(x=age, y=equiv_strength, name='Strength (MPa)', marker={'color': 'brown', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_strength = go.Scatter(dict(x=age, y=equiv_strength, name='Strength (MPa)', marker={'color': 'brown', 'symbol': 104, 'size': 10}, mode="lines"))
     data = go.Data([plot_strength])
     layout=go.Layout(title="Concrete Strength Graph", xaxis={'title':'Age (days)'}, yaxis={'title':'Concrete Strength (Mpa)'}, showlegend=True)
     figure=go.Figure(data=data,layout=layout)
-    strength_graph = ply.plot(figure, auto_open=False, output_type='div')"""
+    strength_graph = ply.plot(figure, auto_open=False, output_type='div')
             
     context = {
         'temp_graph': temp_graph,
-        #'maturity_graph': maturity_graph,
+        'maturity_graph': maturity_graph,
         'data': Data.objects.last(),
         'current_maturity': current_maturity,
         #'strength_graph': strength_graph, # NEWLY ADDED 
@@ -226,34 +230,7 @@ def combined_data(request, pk):
         'sensor': sensor,
         'form': form,
         }
-    # ====== Save Temp. Humidity Data to DB =====#
-    existing_temp = Temperature_Data.objects.filter(sensor=sensor)
-    counted_tmp_row = int(len(existing_temp))
-
-    if counted_tmp_row == 0:
-        for d_age, d_temp, d_humid in zip(tim, temp, hum):
-            harvest_data = Temperature_Data(approx_age=d_age, approx_temp=d_temp, approx_hum=d_humid, sensor_id=sensor_id)
-            harvest_data.save()     
-    elif counted_tmp_row != 0:
-        for items in existing_temp:
-            unique_id = items.sensor_id
-
-            if sensor_id == unique_id:
-                if counted_tmp_row == len(tim):
-                    pass
-                elif counted_tmp_row < len(tim):
-                    outstanding_hum = hum[counted_tmp_row:]
-                    outstanding_temp = temp[counted_tmp_row:]
-                    outstanding_age = tim[counted_tmp_row:]
-                    Temperature_Data.objects.filter(sensor=sensor).delete()
-                    for updated_age, updated_temp, updated_hum in zip(outstanding_age, outstanding_temp, outstanding_hum):
-                        updated_values = Temperature_Data(approx_age=updated_age, approx_temp=updated_temp, approx_hum=updated_hum, sensor_id=sensor_id)
-                        updated_values.save()
-    else:
-        messages.warning(request, f'Check the list of data for {sensor.sensor_name} in the sever and/or your local database')
-
-    # ========= END: Save 'Temperature & Humidity' Data ========= #
-
+    
     # ====== Save Maturity Data to DB  ======= #
     existing_maturity = Maturity_Data.objects.filter(sensor=sensor)
     counted_mat_row = int(len(existing_maturity))
@@ -316,45 +293,6 @@ def combined_data(request, pk):
 
     return render(request, 'sensors/combined_data.html', context)
 
-def Temp_Humid(request, pk):
-    sensor = Sensor.objects.get(pk=pk)
-    #project_id = sensor.project.id
-    #sensor_id = sensor.id
-
-    age = []
-    temp = []
-    hum = []
-
-    data = Temperature_Data.objects.filter(sensor=sensor)
-    
-    for items in data:
-        d_age = items.approx_age
-        age.append(d_age)
-        d_temp = items.approx_temp
-        temp.append(d_temp)
-        d_hum = items.approx_hum
-        hum.append(d_hum)
-
-    plot_hum = go.Scatter(dict(x=age, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
-    plot_temp = go.Scatter(dict(x=age, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
-    
-    data = go.Data([plot_hum, plot_temp])
-    layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
-    figure=go.Figure(data=data,layout=layout)
-    temp_graph = ply.plot(figure, auto_open=False, output_type='div')
-
-    last_data = data.last()
-    current_temp = round(float(last_data.approx_temp), 2)
-    current_hum = round(float(last_data.approx_hum), 2)
-
-    context = {
-        'temp_graph': temp_graph,
-        'current_temp': current_temp,
-        'current_hum': current_hum,
-        'sensor': sensor,
-        }
-    
-    return render(request, 'sensors/Temp.html', context)
 
 def Strength(request, pk):
     sensor = Sensor.objects.get(pk=pk)

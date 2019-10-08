@@ -23,6 +23,15 @@ class Data(models.Model):
     def __str__(self):
         return f'{self.sensor.sensor_name}'
 
+class Temperature_Data(models.Model):
+    sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE, default='')
+    approx_age = models.FloatField()
+    approx_temp = models.FloatField()
+    approx_hum = models.FloatField()
+    last_updated = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return f'{self.sensor.sensor_name}'
 
 class Maturity_Data(models.Model):
     sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE, default='')
