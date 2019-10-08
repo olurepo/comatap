@@ -136,7 +136,7 @@ def combined_data(request, pk):
     
     
     #data.delete()
-    Temperature_Data.objects.filter(sensor=sensor).delete()
+    #Temperature_Data.objects.filter(sensor=sensor).delete()
     Strength_Data.objects.filter(sensor=sensor).delete()
     Maturity_Data.objects.filter(sensor=sensor).delete()
     
