@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, #Temperature_Data
+from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data#, Temperature_Data
 from projects.models import Project
 from .forms import MaturityForm
 
