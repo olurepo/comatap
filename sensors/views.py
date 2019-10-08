@@ -354,7 +354,7 @@ def Temp_Humid(request, pk):
         'sensor': sensor,
         }
     
-    return render(request, 'sensors/Temp.html', context)
+    return render(request, 'sensors/Temp_Humid.html', context)
 
 def Strength(request, pk):
     sensor = Sensor.objects.get(pk=pk)
