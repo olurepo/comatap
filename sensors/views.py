@@ -196,9 +196,9 @@ def combined_data(request, pk):
     
     #avoid lengthy delay for data
     proc_data = Processed_Data.objects.filter(sensor=sensor)
-    timer = proc_data.age
-    humer = proc_data.humidity
-    tempr = proc_data.temperature
+    timer = list(proc_data.age)
+    humer = list(proc_data.humidity)
+    tempr = list(proc_data.temperature)
     
     plot_hum = go.Scatter(dict(x=timer, y=humer, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
     plot_temp = go.Scatter(dict(x=timer, y=tempr, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
