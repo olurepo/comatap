@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data
+from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, Processed_Data
 from projects.models import Project
 from .forms import MaturityForm
 
@@ -13,6 +13,67 @@ import json
 import numpy as np
 import time
 import datetime
+
+
+def save_processed_data(request, pk):
+    sensor = Sensor.objects.get(pk=pk)
+    project_id = sensor.project.id
+    sensor_id = sensor.id
+
+    tim = []
+    temp = []
+    hum = []
+
+    raw_data = Data.objects.filter(sensor=sensor)
+    
+    # get all the available data on this sensor
+    xList = []
+    for item in raw_data:
+
+        log_time = item.time_taken         # time data in np.datetime64
+        convert_time = np.datetime64(log_time).astype('float')
+        xList.append(convert_time/(3600000000))  # in 'hours'
+        #xList.append(convert_time/(3600000000*24))  # to convert age to 'days', multiply by 24
+        dt = round(xList[-1] - xList[0], 2)     # time interval btw temp records
+        tim.append(dt)
+        
+
+        tmp = item.ave_temp     # temperature data
+        temp.append(tmp)
+
+        humid = item.ave_hum    # humidity data
+        hum.append(humid)
+
+
+    # ====== Save Processed Data to DB  ======= #
+    proc_data = Processed_Data.objects.filter(sensor=sensor)
+    row_count = int(len(proc_data))
+
+    if row_count == 0:    # meaning there are NO previous data
+        for delta_t, average_temperature, average_humidity in zip(tim, temp, hum):
+            processed_values = Processed_Data(age = delta_t, temperature = average_temperature, humidity = average_humidity, sensor_id=sensor_id)
+            processed_values.save()
+
+    elif row_count != 0:   # meaning there are existing data
+        for items in proc_data:
+            unique_id = items.sensor_id
+
+            if sensor_id == unique_id:   # confirm first that it is same sensor_id (see sensor_id definition above)
+                
+                if row_count == len(tim):
+                    combined_data(request, pk)    # no need for any action becos there are no new data // why not call the graph plotting function here?
+                
+                elif row_count < len(tim):  # 'temp' could have been used but for the inserted zeros
+                    outstanding_humid = hum[row_count:]
+                    outstanding_temp = temp[row_count:]
+                    outstanding_age = tim[row_count:]
+                    #Processed_Data.objects.filter(sensor=sensor).delete()
+                    for update_age, update_temperature, update_humidity in zip(outstanding_age, outstanding_temp, outstanding_humid): 
+                        updated_values = Processed_Data(age=update_age, temperature = update_temperature, humidity = update_humidity, sensor_id=unique_id)
+                        updated_values.save()
+    else:
+        messages.warning(request, f'Check the list of data for {sensor.sensor_name} in the sever and/or your local database')
+    # ========= END: Save Processed Data ========= #
 
 
 
@@ -76,9 +137,11 @@ def get_data(request, pk):
                         save_data.save()
                 else:
                     print('Check the list of data in the sever and your local database!')   # can be removed
+                    
     
     msg = messages.success(request, f'Update successful. Please confirm test configuration parameters.')
-
+    
+    save_processed_data(request, pk)
     context = {
         'msg': msg,
         'sensor': sensor,
@@ -98,6 +161,9 @@ ultimate_strength = 50 # N/sq.mm
 a = 4.0
 b = 0.85
 
+tim = []
+temp = [0]
+hum = [0]
 def combined_data(request, pk):
 
     global datum_temp
@@ -111,7 +177,7 @@ def combined_data(request, pk):
     # get method, i.e. create form to get params
     form = MaturityForm()
 
-    #do a post and receive data command
+    #do a 'POST and receive' data command
     form = MaturityForm(request.POST)
     if form.is_valid():
         datum_temp = form.cleaned_data['datum_temp']
@@ -125,21 +191,18 @@ def combined_data(request, pk):
     else:
         form = MaturityForm() # repeat get command
 
-    tim = []
-    temp = [0]
-    hum = [0]
 
     sensor = Sensor.objects.get(pk=pk)
-    project_id = sensor.project.id
+    #project_id = sensor.project.id
     sensor_id = sensor.id
 
     data = Data.objects.filter(sensor=sensor)
-    
+
+
     """
-    data.delete()
-    Strength_Data.objects.filter(sensor=sensor).delete()
-    Maturity_Data.objects.filter(sensor=sensor).delete()
-    """
+    tim = []
+    temp = [0]
+    hum = [0]
 
     # get all the available data on this sensor
     xList = []
@@ -158,17 +221,28 @@ def combined_data(request, pk):
 
         humid = item.ave_hum    # humidity data
         hum.append(humid)
+        """
+
+    procsd_data = Processed_Data.objects.filter(sensor=sensor)
+
+    for items in procsd_data:
+        x = items.age
+        y = items.temperature
+        z = items.humidity
+        tim.append(x)
+        temp.append(y)
+        hum.append(z)
 
 
     plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
     plot_temp = go.Scatter(dict(x=tim, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
     
     data = go.Data([plot_hum, plot_temp])
-    layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
+    layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C) & Huimidity (%)'})
     figure=go.Figure(data=data,layout=layout)
     temp_graph = ply.plot(figure, auto_open=False, output_type='div')
     
-
+    
     delta_t = [y-x for x,y in zip(tim, tim[1:])]
     matu = [0]
     for time_int, ave_temp in zip(delta_t, temp):
@@ -179,17 +253,14 @@ def combined_data(request, pk):
     current_maturity = maturity_index[-1] # get last M value to display on results' page
     #current_maturity = matu[-1]
     
-    plot_maturity = go.Scatter(dict(x=tim, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
+    """plot_maturity = go.Scatter(dict(x=tim, y=maturity_index, name='Concrete Maturity', marker={'color': 'grey', 'symbol': 104, 'size': 10}, mode="lines"))
     data = go.Data([plot_maturity])
     layout=go.Layout(title="Concrete Maturity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Maturity Index (C-hr)'}, showlegend=True)
     figure=go.Figure(data=data,layout=layout)
 
-    maturity_graph = ply.plot(figure, auto_open=False, output_type='div')
-
+    maturity_graph = ply.plot(figure, auto_open=False, output_type='div')"""
     
 
-   # tim = get_data(sensor_id)[0]
-   # temp = get_data(sensor_id)[1]
     age = []                # age on x-axis
     equiv_strength = []     # strength on y-axis
 
@@ -208,25 +279,25 @@ def combined_data(request, pk):
         equiv_strength.append(predict_strength)
     current_strength = round(equiv_strength[-1], 2)
 
-    plot_strength = go.Scatter(dict(x=age, y=equiv_strength, name='Strength (MPa)', marker={'color': 'brown', 'symbol': 104, 'size': 10}, mode="lines"))
+    """plot_strength = go.Scatter(dict(x=age, y=equiv_strength, name='Strength (MPa)', marker={'color': 'brown', 'symbol': 104, 'size': 10}, mode="lines"))
     data = go.Data([plot_strength])
     layout=go.Layout(title="Concrete Strength Graph", xaxis={'title':'Age (days)'}, yaxis={'title':'Concrete Strength (Mpa)'}, showlegend=True)
     figure=go.Figure(data=data,layout=layout)
-    strength_graph = ply.plot(figure, auto_open=False, output_type='div')
+    strength_graph = ply.plot(figure, auto_open=False, output_type='div')"""
             
     context = {
         'temp_graph': temp_graph,
-        'maturity_graph': maturity_graph,
         'data': Data.objects.last(),
         'current_maturity': current_maturity,
-        #'strength_graph': strength_graph, # NEWLY ADDED 
-        #'current_strength': current_strength, #NEWLY ADDED
+        #'maturity_graph': maturity_graph,
+        #'strength_graph': strength_graph, 
+        #'current_strength': current_strength,
         'matu': matu,
         'maturity_index': maturity_index,
         'sensor': sensor,
         'form': form,
         }
-    
+   
     # ====== Save Maturity Data to DB  ======= #
     existing_maturity = Maturity_Data.objects.filter(sensor=sensor)
     counted_mat_row = int(len(existing_maturity))
