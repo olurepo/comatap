@@ -64,8 +64,9 @@
                                             </p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"> Return </button>
-                                            <a href="{% url 'combined-data' sensor.pk %}" class="btn btn-primary" type="submit"> Proceed </a>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"> Cancel </button>
+                                            <a href="{% url 'Temp_Humid' sensor.pk %}" class="btn btn-secondary" type="submit"> Last Data </a>
+                                            <a href="{% url 'combined-data' sensor.pk %}" class="btn btn-primary" type="submit"> Proceed-2-Update </a>
                                         </div>
                                     </div>
                                 </div>
