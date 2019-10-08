@@ -328,9 +328,9 @@ def Temp_Humid(request, pk):
     temp = []
     hum = []
 
-    data = Temp_Hum_Data.objects.filter(sensor=sensor)
+    temphum_data = Temp_Hum_Data.objects.filter(sensor=sensor)
     
-    for items in data:
+    for items in temphum_data:
         d_age = items.approx_age
         age.append(d_age)
         d_temp = items.approx_temp
@@ -346,7 +346,7 @@ def Temp_Humid(request, pk):
     figure=go.Figure(data=data,layout=layout)
     temp_graph = ply.plot(figure, auto_open=False, output_type='div')
 
-    last_data = data.last()
+    last_data = temphum_data.last()
     current_temp = round(float(last_data.approx_temp), 2)
     current_hum = round(float(last_data.approx_hum), 2)
 
