@@ -140,7 +140,7 @@ def get_data(request, pk):
                     
     
     msg = messages.success(request, f'Update successful. Please confirm test configuration parameters.')
-    save_processed_data(request, pk)
+    
 
     context = {
         'msg': msg,
@@ -193,17 +193,6 @@ def combined_data(request, pk):
     else:
         form = MaturityForm() # repeat get command
 
-    
-    #avoid lengthy delay for data
-    procsd_data = Processed_Data.objects.filter(sensor=sensor)
-
-    plot_hum = go.Scatter(dict(x=list(procsd_data.age), y=list(procsd_data.humidity), name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
-    plot_temp = go.Scatter(dict(x=list(procsd_data.age), y=list(procsd_data.temperature), name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
-    
-    data = go.Data([plot_hum, plot_temp])
-    layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C) & Huimidity (%)'})
-    figure=go.Figure(data=data,layout=layout)
-    temp_graph = ply.plot(figure, auto_open=False, output_type='div')
 
     sensor = Sensor.objects.get(pk=pk)
     #project_id = sensor.project.id
@@ -236,7 +225,7 @@ def combined_data(request, pk):
         hum.append(humid)
         """
 
-    """procsd_data = Processed_Data.objects.filter(sensor=sensor)
+    procsd_data = Processed_Data.objects.filter(sensor=sensor)
 
     for items in procsd_data:
         x = items.age
@@ -253,9 +242,9 @@ def combined_data(request, pk):
     data = go.Data([plot_hum, plot_temp])
     layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C) & Huimidity (%)'})
     figure=go.Figure(data=data,layout=layout)
-    temp_graph = ply.plot(figure, auto_open=False, output_type='div')"""
+    temp_graph = ply.plot(figure, auto_open=False, output_type='div')
     
-
+    
     delta_t = [y-x for x,y in zip(tim, tim[1:])]
     matu = [0]
     for time_int, ave_temp in zip(delta_t, temp):
@@ -310,7 +299,7 @@ def combined_data(request, pk):
         'sensor': sensor,
         'form': form,
         }
-    
+ """   
     # ====== Save Maturity Data to DB  ======= #
     existing_maturity = Maturity_Data.objects.filter(sensor=sensor)
     counted_mat_row = int(len(existing_maturity))
@@ -372,7 +361,7 @@ def combined_data(request, pk):
 
 
     return render(request, 'sensors/combined_data.html', context)
-
+"""
 
 
 def Strength(request, pk):
