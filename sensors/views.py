@@ -195,13 +195,10 @@ def combined_data(request, pk):
 
     
     #avoid lengthy delay for data
-    proc_data = Processed_Data.objects.filter(sensor=sensor)
-    timer = list(proc_data.age)
-    humer = list(proc_data.humidity)
-    tempr = list(proc_data.temperature)
-    
-    plot_hum = go.Scatter(dict(x=timer, y=humer, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
-    plot_temp = go.Scatter(dict(x=timer, y=tempr, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
+    procsd_data = Processed_Data.objects.filter(sensor=sensor)
+
+    plot_hum = go.Scatter(dict(x=list(procsd_data.age), y=list(procsd_data.humidity), name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_temp = go.Scatter(dict(x=list(procsd_data.age), y=list(procsd_data.temperature), name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
     
     data = go.Data([plot_hum, plot_temp])
     layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C) & Huimidity (%)'})
@@ -239,7 +236,7 @@ def combined_data(request, pk):
         hum.append(humid)
         """
 
-    procsd_data = Processed_Data.objects.filter(sensor=sensor)
+    """procsd_data = Processed_Data.objects.filter(sensor=sensor)
 
     for items in procsd_data:
         x = items.age
@@ -250,7 +247,7 @@ def combined_data(request, pk):
         hum.append(z)
 
 
-    """plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
     plot_temp = go.Scatter(dict(x=tim, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
     
     data = go.Data([plot_hum, plot_temp])
