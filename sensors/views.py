@@ -299,7 +299,7 @@ def combined_data(request, pk):
         'sensor': sensor,
         'form': form,
         }
- """   
+"""   
     # ====== Save Maturity Data to DB  ======= #
     existing_maturity = Maturity_Data.objects.filter(sensor=sensor)
     counted_mat_row = int(len(existing_maturity))
