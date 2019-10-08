@@ -141,7 +141,7 @@ def get_data(request, pk):
     
     msg = messages.success(request, f'Update successful. Please confirm test configuration parameters.')
     
-
+    save_processed_data(request, pk)
     context = {
         'msg': msg,
         'sensor': sensor,
@@ -165,8 +165,6 @@ tim = []
 temp = [0]
 hum = [0]
 def combined_data(request, pk):
-
-    save_processed_data(request, pk)
 
     global datum_temp
     global activation_energy
@@ -299,7 +297,7 @@ def combined_data(request, pk):
         'sensor': sensor,
         'form': form,
         }
-"""   
+   
     # ====== Save Maturity Data to DB  ======= #
     existing_maturity = Maturity_Data.objects.filter(sensor=sensor)
     counted_mat_row = int(len(existing_maturity))
@@ -361,7 +359,7 @@ def combined_data(request, pk):
 
 
     return render(request, 'sensors/combined_data.html', context)
-"""
+
 
 
 def Strength(request, pk):
