@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, Temperature_Data
+from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, Temp_Hum_Data
 from projects.models import Project
 from .forms import MaturityForm
 
@@ -136,7 +136,7 @@ def combined_data(request, pk):
     
     
     #data.delete()
-    #Temperature_Data.objects.filter(sensor=sensor).delete()
+    #Temp_Hum_Data.objects.filter(sensor=sensor).delete()
     Strength_Data.objects.filter(sensor=sensor).delete()
     Maturity_Data.objects.filter(sensor=sensor).delete()
     
@@ -229,12 +229,12 @@ def combined_data(request, pk):
     
     
     # ====== Save Temp. Humidity Data to DB =====#
-    existing_temp = Temperature_Data.objects.filter(sensor=sensor)
+    existing_temp = Temp_Hum_Data.objects.filter(sensor=sensor)
     counted_tmp_row = int(len(existing_temp))
 
     if counted_tmp_row == 0:
         for d_age, d_temp, d_humid in zip(tim, temp, hum):
-            harvest_data = Temperature_Data(approx_age=d_age, approx_temp=d_temp, approx_hum=d_humid, sensor_id=sensor_id)
+            harvest_data = Temp_Hum_Data(approx_age=d_age, approx_temp=d_temp, approx_hum=d_humid, sensor_id=sensor_id)
             harvest_data.save()     
     elif counted_tmp_row != 0:
         for items in existing_temp:
@@ -247,9 +247,9 @@ def combined_data(request, pk):
                     outstanding_hum = hum[counted_tmp_row:]
                     outstanding_temp = temp[counted_tmp_row:]
                     outstanding_age = tim[counted_tmp_row:]
-                    Temperature_Data.objects.filter(sensor=sensor).delete()
+                    Temp_Hum_Data.objects.filter(sensor=sensor).delete()
                     for updated_age, updated_temp, updated_hum in zip(outstanding_age, outstanding_temp, outstanding_hum):
-                        updated_values = Temperature_Data(approx_age=updated_age, approx_temp=updated_temp, approx_hum=updated_hum, sensor_id=sensor_id)
+                        updated_values = Temp_Hum_Data(approx_age=updated_age, approx_temp=updated_temp, approx_hum=updated_hum, sensor_id=sensor_id)
                         updated_values.save()
     else:
         messages.warning(request, f'Check the list of data for {sensor.sensor_name} in the sever and/or your local database')
@@ -328,7 +328,7 @@ def Temp_Humid(request, pk):
     temp = []
     hum = []
 
-    data = Temperature_Data.objects.filter(sensor=sensor)
+    data = Temp_Hum_Data.objects.filter(sensor=sensor)
     
     for items in data:
         d_age = items.approx_age
