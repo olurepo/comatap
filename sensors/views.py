@@ -193,6 +193,21 @@ def combined_data(request, pk):
     else:
         form = MaturityForm() # repeat get command
 
+    
+    #avoid lengthy delay for data
+    proc_data = Processed_Data.objects.filter(sensor=sensor)
+    timer = proc_data.age
+    humer = proc_data.humidity
+    tempr = proc_data.temperature
+    
+    plot_hum = go.Scatter(dict(x=timer, y=humer, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_temp = go.Scatter(dict(x=timer, y=tempr, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
+    
+    data = go.Data([plot_hum, plot_temp])
+    layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C) & Huimidity (%)'})
+    figure=go.Figure(data=data,layout=layout)
+    temp_graph = ply.plot(figure, auto_open=False, output_type='div')
+
     sensor = Sensor.objects.get(pk=pk)
     #project_id = sensor.project.id
     sensor_id = sensor.id
@@ -224,9 +239,9 @@ def combined_data(request, pk):
         hum.append(humid)
         """
 
-    proc_data = Processed_Data.objects.filter(sensor=sensor)
+    procsd_data = Processed_Data.objects.filter(sensor=sensor)
 
-    for items in proc_data:
+    for items in procsd_data:
         x = items.age
         y = items.temperature
         z = items.humidity
@@ -235,13 +250,13 @@ def combined_data(request, pk):
         hum.append(z)
 
 
-    plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
+    """plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
     plot_temp = go.Scatter(dict(x=tim, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
     
     data = go.Data([plot_hum, plot_temp])
     layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C) & Huimidity (%)'})
     figure=go.Figure(data=data,layout=layout)
-    temp_graph = ply.plot(figure, auto_open=False, output_type='div')
+    temp_graph = ply.plot(figure, auto_open=False, output_type='div')"""
     
 
     delta_t = [y-x for x,y in zip(tim, tim[1:])]
