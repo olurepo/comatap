@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, Temperature_Data
+from .models import Sensor, Data, TestConfig, Maturity_Data, Strength_Data, #Temperature_Data
 from projects.models import Project
 from .forms import MaturityForm
 
@@ -226,6 +226,8 @@ def combined_data(request, pk):
         'sensor': sensor,
         'form': form,
         }
+    
+    """
     # ====== Save Temp. Humidity Data to DB =====#
     existing_temp = Temperature_Data.objects.filter(sensor=sensor)
     counted_tmp_row = int(len(existing_temp))
@@ -252,7 +254,8 @@ def combined_data(request, pk):
     else:
         messages.warning(request, f'Check the list of data for {sensor.sensor_name} in the sever and/or your local database')
 
-    # ========= END: Save 'Temperature & Humidity' Data ========= #
+    # ========= END: Save 'Temperature & Humidity' Data ========= #"
+    """
 
     # ====== Save Maturity Data to DB  ======= #
     existing_maturity = Maturity_Data.objects.filter(sensor=sensor)
@@ -316,7 +319,7 @@ def combined_data(request, pk):
 
     return render(request, 'sensors/combined_data.html', context)
 
-def Temp_Humid(request, pk):
+"""def Temp_Humid(request, pk):
     sensor = Sensor.objects.get(pk=pk)
     #project_id = sensor.project.id
     #sensor_id = sensor.id
@@ -354,7 +357,7 @@ def Temp_Humid(request, pk):
         'sensor': sensor,
         }
     
-    return render(request, 'sensors/Temp_Humid.html', context)
+    return render(request, 'sensors/Temp_Humid.html', context)"""
 
 def Strength(request, pk):
     sensor = Sensor.objects.get(pk=pk)
