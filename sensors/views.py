@@ -166,6 +166,8 @@ temp = [0]
 hum = [0]
 def combined_data(request, pk):
 
+    save_processed_data(request, pk)
+
     global datum_temp
     global activation_energy
     global gas_constant
