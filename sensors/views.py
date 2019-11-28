@@ -386,7 +386,7 @@ def Strength(request, pk):
 
     plot_strength = go.Scatter(dict(x=age, y=equiv_strength, name='Strength (MPa)', marker={'color': 'brown', 'symbol': 104, 'size': 10}, mode="lines"))
     graph_data = go.Data([plot_strength])
-    layout=go.Layout(title="Concrete Strength Graph", xaxis={'title':'Age (days)'}, yaxis={'title': sensor.project.title 'Concrete Strength (MPa)'}, showlegend=True)
+    layout=go.Layout(title="Concrete Strength Graph", xaxis={'title':'Age (days)'}, yaxis={'title': sensor.sensor_name 'Concrete Strength (MPa)'}, showlegend=True)
     figure=go.Figure(data=graph_data,layout=layout)
     strength_graph = ply.plot(figure, auto_open=False, output_type='div')
 
