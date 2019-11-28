@@ -161,7 +161,7 @@ def combined_data(request, pk):
 
 
     #plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
-    plot_temp = go.Scatter(dict(x=tim, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_temp = go.Scatter(dict(x=tim, y=temp, name='temperature', marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
     
     #data = go.Data([plot_hum, plot_temp])
     data = go.Data([plot_temp])
@@ -346,10 +346,10 @@ def Temp_Humid(request, pk):
         hum.append(d_hum)
 
     #plot_hum = go.Scatter(dict(x=age, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
-    plot_temp = go.Scatter(dict(x=age, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
+    plot_temp = go.Scatter(dict(x=age, y=temp, name='temperature', marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
     
     #data = go.Data([plot_hum, plot_temp])
-    data = go.Data([plot_hum, plot_temp])
+    data = go.Data([plot_temp])
     #layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
     layout=go.Layout(title="Concrete Temperature Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
     figure=go.Figure(data=data,layout=layout)
