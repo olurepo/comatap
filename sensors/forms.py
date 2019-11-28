@@ -43,11 +43,11 @@ class MaturityForm(forms.Form):
     }))
 
     a = forms.FloatField(widget=forms.Textarea(attrs={
-        'placeholder': 'default: 3.45',
+        'placeholder': 'default: 4.0',
         'rows': '1',
     }))
 
     b = forms.FloatField(widget=forms.Textarea(attrs={
-        'placeholder': 'default: 0.9',
+        'placeholder': 'default: 0.85',
         'rows': '1',
     }))

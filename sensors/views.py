@@ -160,11 +160,13 @@ def combined_data(request, pk):
         hum.append(humid)
 
 
-    plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
+    #plot_hum = go.Scatter(dict(x=tim, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
     plot_temp = go.Scatter(dict(x=tim, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
     
-    data = go.Data([plot_hum, plot_temp])
-    layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
+    #data = go.Data([plot_hum, plot_temp])
+    data = go.Data([plot_temp])
+    #layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
+    layout=go.Layout(title="Concrete Temperature Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
     figure=go.Figure(data=data,layout=layout)
     temp_graph = ply.plot(figure, auto_open=False, output_type='div')
     
@@ -241,9 +243,9 @@ def combined_data(request, pk):
             unique_id = items.sensor_id
 
             if sensor_id == unique_id:
-                if counted_tmp_row == len(tim):
+                if counted_tmp_row == len(temp):  # initially len(tim) was used
                     pass
-                elif counted_tmp_row < len(tim):
+                elif counted_tmp_row < len(temp):
                     outstanding_hum = hum[counted_tmp_row:]
                     outstanding_temp = temp[counted_tmp_row:]
                     outstanding_age = tim[counted_tmp_row:]
@@ -286,6 +288,7 @@ def combined_data(request, pk):
         messages.warning(request, f'Check the list of data for {sensor.sensor_name} in the sever and/or your local database')
 
     # ========= END: Save Maturity Data ========= #
+
 
     # ====== Save Strength Data to DB  ======= #
     existing_strength = Strength_Data.objects.filter(sensor=sensor)
@@ -330,19 +333,25 @@ def Temp_Humid(request, pk):
 
     temphum_data = Temp_Hum_Data.objects.filter(sensor=sensor)
     
+    age_list = []
     for items in temphum_data:
-        d_age = items.approx_age
+        d_age= items.approx_age
+        """ages = items.approx_age
+        age_list.append(ages)
+        d_age = round((age_list[-1] - age_list[0]), 2)"""
         age.append(d_age)
         d_temp = items.approx_temp
         temp.append(d_temp)
         d_hum = items.approx_hum
         hum.append(d_hum)
 
-    plot_hum = go.Scatter(dict(x=age, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
+    #plot_hum = go.Scatter(dict(x=age, y=hum, name='humidity', marker={'color': 'blue', 'symbol': 104, 'size': 10}, mode="lines"))
     plot_temp = go.Scatter(dict(x=age, y=temp, name="temperature", marker={'color': 'red', 'symbol': 104, 'size': 10}, mode="lines"))
     
+    #data = go.Data([plot_hum, plot_temp])
     data = go.Data([plot_hum, plot_temp])
-    layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
+    #layout=go.Layout(title="Concrete Temperature & Humidity Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
+    layout=go.Layout(title="Concrete Temperature Graph", xaxis={'title':'Age (hr)'}, yaxis={'title':'Temperature (C)'})
     figure=go.Figure(data=data,layout=layout)
     temp_graph = ply.plot(figure, auto_open=False, output_type='div')
 
@@ -377,7 +386,7 @@ def Strength(request, pk):
 
     plot_strength = go.Scatter(dict(x=age, y=equiv_strength, name='Strength (MPa)', marker={'color': 'brown', 'symbol': 104, 'size': 10}, mode="lines"))
     graph_data = go.Data([plot_strength])
-    layout=go.Layout(title="Concrete Strength Graph", xaxis={'title':'Age (days)'}, yaxis={'title':'Concrete Strength (Mpa)'}, showlegend=True)
+    layout=go.Layout(title="Concrete Strength Graph", xaxis={'title':'Age (days)'}, yaxis={'title': sensor.project.project_title 'Concrete Strength (MPa)'}, showlegend=True)
     figure=go.Figure(data=graph_data,layout=layout)
     strength_graph = ply.plot(figure, auto_open=False, output_type='div')
 
