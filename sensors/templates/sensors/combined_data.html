@@ -35,13 +35,13 @@
                 </p>
     
                 <br>
-                <h2> Concrete Temperature & Humidity </h2>
-                <p>  Real-time temperature and humidity of concrete is presented below.</p>
+                <h2> Concrete Temperature </h2>
+                <p>  Real-time temperature of {{sensor.project.title}} concrete is presented below.</p>
             
                 {% if data %}  <!-- this is similar to 'for loop' in python -->
                     
-                    <p class="article-content"> The current temperature of concrete is = {{ data.ave_temp }}°C</p>
-                    <p class="article-content"> The current humidity of concrete is = {{ data.ave_hum }} %</p>      
+                    <p class="article-content"> The current concrete temperature is = {{ data.ave_temp }}°C</p>
+                    <!-- <p class="article-content"> The current humidity of concrete is = {{ data.ave_hum }} %</p> -->     
                 {% endif %}
                 
                 {% if temp_graph %} 

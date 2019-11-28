@@ -13,10 +13,11 @@
         
             <br>
             <p>
-                <h2> Real-Time Concrete Temperature & Humidity </h2>
-                <p>  Real-time condition of this concrete specimen is presented below. </p>
+                <h2> Real-Time Concrete Temperature </h2>
+                <p>  Real-time condition of {{sensor.project.title}} is presented below. </p>
                 
-                <p class="article-content"> The current Temp. (C) and Humidity (%) of this specimen is = {{ current_temp }} C & {{ current_hum }}% </p>
+                <!--<p class="article-content"> The current Temp. (C) and Humidity (%) of this specimen is = {{ current_temp }} C & {{ current_hum }}% </p> -->
+                <p class="article-content"> The current Temperature (°C) of this specimen is = {{ current_temp }} °C </p>
             
                 <!-- graph was converted to a string in a dict called context -->
                 {% if temp_graph %} 
